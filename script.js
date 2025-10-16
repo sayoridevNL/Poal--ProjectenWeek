@@ -1,6 +1,10 @@
 // These are all the html elements that are being importet into the javascript as variable
 const player1 = document.getElementById("player1");
 const player2 = document.getElementById("player2")
+const npc1_1 = document.getElementById("npc1_1")
+const npc1_2 = document.getElementById("npc1_2")
+const npc2_1 = document.getElementById("npc2_1")
+const npc2_2 = document.getElementById("npc2_2")
 const ball = document.getElementById("ball");
 const score = document.getElementById("score");
 const timer = document.getElementById("timer")
@@ -23,6 +27,23 @@ let player1x = 15;
 let player1y = 350;
 let player2x = 1400;
 let player2y = 350;
+
+//this is for the locations of the npc
+let npc1_1x = 300;
+let npc1_1y = 200;
+let npc1_2x = 300;
+let npc1_2y = 500;
+let npc2_1x = 1000;
+let npc2_1y = 200;
+let npc2_2x = 1000;
+let npc2_2y = 500;
+
+let npc1_1Targetx = 0;
+let npc1_1Targety = 0;
+let npcMoving = false;
+
+// this sets the speed for the npc
+const npcSpeed = 7;
 
 // This is for the size of the player 
 const playerSize = 50;
@@ -92,7 +113,7 @@ function movePlayer1() {
     if (keys.a && player1x > 15) {
         player1x -= playerSpeed;
     }
-    if (keys.d && player1x < 1385) {
+    if (keys.d && player1x < 670) {
         player1x += playerSpeed;
     }
 
@@ -105,10 +126,10 @@ function movePlayer2() {
     if (keys.i && player2y > 15) {
         player2y -= playerSpeed;
     }
-    if (keys.k && player2y < 635) {
+    if (keys.k && player2y < 634) {
         player2y += playerSpeed;
     }
-    if (keys.j && player2x > 15) {
+    if (keys.j && player2x > 730) {
         player2x -= playerSpeed;
     }
     if (keys.l && player2x < 1385) {
@@ -224,6 +245,7 @@ function gameLoop() {
     updateScore();
     movePlayer1();
     movePlayer2();
+    npc1_1Move()
     setPositionGoal();
     requestAnimationFrame(gameLoop);
 }

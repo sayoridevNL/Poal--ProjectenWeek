@@ -51,6 +51,46 @@
     border: solid 2px lightblue;
 }
 
+#npc1_1 {
+    height: 50px;
+    width: 50px;
+    position: absolute;
+    left: 300px;
+    top: 200px;
+    background-color: lightblue;
+    border: solid 2px blue;
+}
+
+#npc1_2 {
+    height: 50px;
+    width: 50px;
+    position: absolute;
+    left: 300px;
+    top: 500px;
+    background-color: lightblue;
+    border: solid 2px blue;
+}
+
+#npc2_1 {
+    height: 50px;
+    width: 50px;
+    position: absolute;
+    left: 1000px;
+    top: 200px;
+    background-color: lightcoral;
+    border: solid 2px red;
+}
+
+#npc2_2 {
+    height: 50px;
+    width: 50px;
+    position: absolute;
+    left: 1000px;
+    top: 500px;
+    background-color: lightcoral;
+    border: solid 2px red;
+}
+
 #player2{
     height: 50px;
     width: 50px;
