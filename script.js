@@ -128,7 +128,7 @@ function movePlayer1() {
     if (keys.a && player1x > 15) {
         player1x -= playerSpeed;
     }
-    if (keys.d && player1x < 1385) {
+    if (keys.d && player1x < 690) {
         player1x += playerSpeed;
     }
 
@@ -144,7 +144,7 @@ function movePlayer2() {
     if (keys.arrowdown && player2y < 635) {
         player2y += playerSpeed;
     }
-    if (keys.arrowleft && player2x > 15) {
+    if (keys.arrowleft && player2x > 760) {
         player2x -= playerSpeed;
     }
     if (keys.arrowright && player2x < 1385) {
