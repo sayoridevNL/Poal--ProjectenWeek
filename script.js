@@ -1,18 +1,18 @@
 // These are all the html elements that are being importet into the javascript as variable
 const player1 = document.getElementById("player1");
 const player2 = document.getElementById("player2")
-const npc1_1 = document.getElementById("npc1_1")
-const npc1_2 = document.getElementById("npc1_2")
-const npc2_1 = document.getElementById("npc2_1")
-const npc2_2 = document.getElementById("npc2_2")
 const ball = document.getElementById("ball");
 const score = document.getElementById("score");
 const timer = document.getElementById("timer")
 const goal1 = document.getElementById("goal1")
 const goal2 = document.getElementById("goal2")
+const npc1_1 = document.getElementById("npc1_1")
+const npc1_2 = document.getElementById("npc1_2")
+const npc2_1 = document.getElementById("npc2_1")
+const npc2_2 = document.getElementById("npc2_2")
 
 // The X and Y are for the location of the ball 
-let x = 725;
+let x = 750;
 let y = 350;
 // This is the speed for both x and y 
 let vx = 7;
@@ -25,25 +25,8 @@ let awayScore = 0;
 //This is for the location of the players
 let player1x = 15;
 let player1y = 350;
-let player2x = 1400;
+let player2x = 1375;
 let player2y = 350;
-
-//this is for the locations of the npc
-let npc1_1x = 300;
-let npc1_1y = 200;
-let npc1_2x = 300;
-let npc1_2y = 500;
-let npc2_1x = 1000;
-let npc2_1y = 200;
-let npc2_2x = 1000;
-let npc2_2y = 500;
-
-let npc1_1Targetx = 0;
-let npc1_1Targety = 0;
-let npcMoving = false;
-
-// this sets the speed for the npc
-const npcSpeed = 7;
 
 // This is for the size of the player 
 const playerSize = 50;
@@ -58,11 +41,29 @@ const goalheight = 100;
 // this is for the player speed
 const playerSpeed = 7;
 
+const npcSize = 50;
+
 // this is for the location  of both goals
 let goal1x = 10;
 let goal1y = 100;
-let goal2x = 1455;
+let goal2x = 1500;
 let goal2y = 100;
+
+// this sets the speed for the npc
+let npc1_1Speed = 5;
+let npc1_2Speed = 5;
+let npc2_1Speed = 5;
+let npc2_2Speed = 5;
+
+//this is for the locations of the npc
+let npc1_1x = 300;
+let npc1_1y = 200;
+let npc1_2x = 300;
+let npc1_2y = 500;
+let npc2_1x = 1000;
+let npc2_1y = 200;
+let npc2_2x = 1000;
+let npc2_2y = 500;
 
 // this sets the time at 0
 let time = 0;
@@ -73,34 +74,48 @@ const keys = {
     a: false,
     s: false,
     d: false,
-    i: false,
-    j: false,
-    k: false,
-    l: false
+    arrowup: false,
+    arrowleft: false,
+    arrowdown: false,
+    arrowright: false
 };
 
 //  this function makes the ball move
 function movementBall() {
-
-    //it moves because the location increases due to the counting up of the velocity
     x += vx;
     y += vy;
 
-    // this is so the ball dont go outside the playing field
-    if (x >= 1455 || x <= 0) {
-        vx = -vx;
-    }
-
+    // random bounce for top and bottom walls
     if (y >= 665 || y <= 15) {
         vy = -vy;
+        vx += (Math.random() - 0.5) * 2;
     }
 
-    // here we turn the variable into pixels so the computer knows when to move
+    // random bounce for left and right wall (goal check is handled in detectCollision)
+    if (x >= 1455 || x <= 0) {
+        vx = -vx;
+        vy += (Math.random() - 0.5) * 2;
+    }
+
+    // limit speed so it doesnt go too crazy
+    const maxSpeed = 12;
+    const minSpeed = 5;
+    const speed = Math.sqrt(vx * vx + vy * vy);
+    if (speed > maxSpeed) {
+        vx = (vx / speed) * maxSpeed;
+        vy = (vy / speed) * maxSpeed;
+    } else if (speed < minSpeed) {
+        vx = (vx / speed) * minSpeed;
+        vy = (vy / speed) * minSpeed;
+    }
+
+
     ball.style.left = x + 'px';
     ball.style.top = y + 'px';
 
     detectCollision();
 }
+
 
 // if a key is pressed the player moves 
 function movePlayer1() {
@@ -113,7 +128,7 @@ function movePlayer1() {
     if (keys.a && player1x > 15) {
         player1x -= playerSpeed;
     }
-    if (keys.d && player1x < 670) {
+    if (keys.d && player1x < 1385) {
         player1x += playerSpeed;
     }
 
@@ -123,21 +138,69 @@ function movePlayer1() {
 
 // same as by player 1
 function movePlayer2() {
-    if (keys.i && player2y > 15) {
+    if (keys.arrowup && player2y > 15) {
         player2y -= playerSpeed;
     }
-    if (keys.k && player2y < 634) {
+    if (keys.arrowdown && player2y < 635) {
         player2y += playerSpeed;
     }
-    if (keys.j && player2x > 730) {
+    if (keys.arrowleft && player2x > 15) {
         player2x -= playerSpeed;
     }
-    if (keys.l && player2x < 1385) {
+    if (keys.arrowright && player2x < 1385) {
         player2x += playerSpeed;
     }
 
     player2.style.left = player2x + 'px';
     player2.style.top = player2y + 'px';
+}
+
+function npc1_1Move() {
+    npc1_1x += npc1_1Speed;
+
+    // this is so the ball dont go outside the playing field
+    if (npc1_1x >= 550 || npc1_1x <= 150) {
+        npc1_1Speed = -npc1_1Speed;
+    } 
+    console.log(npc1_1)
+
+    npc1_1.style.left = npc1_1x + 'px';
+}
+
+function npc1_2Move() {
+    npc1_2y += npc1_2Speed;
+
+    // this is so the ball dont go outside the playing field
+    if (npc1_2y >= 600 || npc1_2y <= 300) {
+        npc1_2Speed = -npc1_2Speed;
+    } 
+
+
+    npc1_2.style.top = npc1_2y + 'px';
+}
+
+function npc2_1Move() {
+    npc2_1y += npc2_1Speed;
+
+    // this is so the ball dont go outside the playing field
+    if (npc2_1y >= 400 || npc2_1y <= 100) {
+        npc2_1Speed = -npc2_1Speed;
+    } 
+
+
+    npc2_1.style.top = npc2_1y + 'px';
+}
+
+function npc2_2Move() {
+    npc2_2x += npc2_2Speed;
+
+    // this is so the ball dont go outside the playing field
+    if (npc2_2x >= 1250 || npc2_2x <= 850) {
+        npc2_2Speed = -npc2_2Speed;
+    } 
+    console.log(npc2_2)
+
+    npc2_2.style.left = npc2_2x + 'px';
 }
 
 // here we set the location of the goal
@@ -155,13 +218,14 @@ function updateScore(){
 
 // we reset the ball to its location this function is only called after a goal
 function resetBall() {
-    x = 725
+    x = 725;
     y = 350;
-    vx = -vx;
-    vy = 7;
+    vx = (Math.random() < 0.5 ? -1 : 1) * 7;
+    vy = (Math.random() - 0.5) * 4;
     ball.style.left = x + 'px';
     ball.style.top = y + 'px';
 }
+
 
 // here we have the timer and this function is in a loop so it counts up
 function setTimer() {
@@ -171,9 +235,6 @@ function setTimer() {
 
 // here we check if collision between ball and player happens
 function detectCollision() {
-
-    // we use rect because it is shorten for rectangle 
-    // with the left right top bottom we get the location of thoses edges 
     const player1Rect = {
         left: player1x,
         right: player1x + playerSize,
@@ -181,7 +242,6 @@ function detectCollision() {
         bottom: player1y + playerSize
     };
 
-    //same here
     const player2Rect = {
         left: player2x,
         right: player2x + playerSize,
@@ -189,7 +249,6 @@ function detectCollision() {
         bottom: player2y + playerSize
     };
 
-    //same here
     const ballRect = {
         left: x,
         right: x + ballSize,
@@ -197,8 +256,35 @@ function detectCollision() {
         bottom: y + ballSize
     };
 
-    // here the computer checks in the loop if the ball and player 1 have touched each other
-    // the reason the ! is here is because it reverses it
+    const Npc1_1Rect = {
+        left: npc1_1x,
+        right: npc1_1x + npcSize,
+        top: npc1_1y,
+        bottom: npc1_1y + npcSize
+    };
+
+    const Npc1_2Rect = {
+        left: npc1_2x,
+        right: npc1_2x + npcSize,
+        top: npc1_2y,
+        bottom: npc1_2y + npcSize
+    };
+
+    const Npc2_1Rect = {
+        left: npc2_1x,
+        right: npc2_1x + npcSize,
+        top: npc2_1y,
+        bottom: npc2_1y + npcSize
+    };
+
+    const Npc2_2Rect = {
+        left: npc2_2x,
+        right: npc2_2x + npcSize,
+        top: npc2_2y,
+        bottom: npc2_2y + npcSize
+    };
+
+
     const collidesWithPlayer1 = !(
         player1Rect.right < ballRect.left ||
         player1Rect.left > ballRect.right ||
@@ -213,58 +299,144 @@ function detectCollision() {
         player2Rect.top > ballRect.bottom
     );
 
+    const collidesWithNpc1_1 = !(
+        Npc1_1Rect.right < ballRect.left ||
+        Npc1_1Rect.left > ballRect.right ||
+        Npc1_1Rect.bottom < ballRect.top ||
+        Npc1_1Rect.top > ballRect.bottom
+    );
 
-    // if the player and ball collide it will change directions 
+    const collidesWithNpc1_2 = !(
+        Npc1_2Rect.right < ballRect.left ||
+        Npc1_2Rect.left > ballRect.right ||
+        Npc1_2Rect.bottom < ballRect.top ||
+        Npc1_2Rect.top > ballRect.bottom
+    );
+
+    const collidesWithNpc2_1 = !(
+        Npc2_1Rect.right < ballRect.left ||
+        Npc2_1Rect.left > ballRect.right ||
+        Npc2_1Rect.bottom < ballRect.top ||
+        Npc2_1Rect.top > ballRect.bottom
+    );
+
+    const collidesWithNpc2_2 = !(
+        Npc2_2Rect.right < ballRect.left ||
+        Npc2_2Rect.left > ballRect.right ||
+        Npc2_2Rect.bottom < ballRect.top ||
+        Npc2_2Rect.top > ballRect.bottom
+    );
+
     if (collidesWithPlayer1 || collidesWithPlayer2) {
+        const player = collidesWithPlayer1 ? player1Rect : player2Rect;
 
+        // calculate the ball center
+        const ballCenterX = x + ballSize / 2;
+        const ballCenterY = y + ballSize / 2;
+
+        // calculate the player center
+        const playerCenterX = (player.left + player.right) / 2;
+        const playerCenterY = (player.top + player.bottom) / 2;
+
+        // calculate the player position relative to the ball position (-1 to 1)
+        const hitX = (ballCenterX - playerCenterX) / (playerSize / 2);
+        const hitY = (ballCenterY - playerCenterY) / (playerSize / 2);
+
+        // reverse horizontal direction
         vx = -vx;
-        vy = -vy;
 
-      
-        x += vx;
-        y += vy;
+        // add variation based on where the ball hit the player
+        vy += hitY * 3;
+        vx += hitX * 1.5;
+
+        // add random variation to prevent repetitive patterns
+        vx += (Math.random() - 0.5) * 2;
+        vy += (Math.random() - 0.5) * 2;
+
+        // move ball slightly to prevent it from tweaking out
+        x += vx * 2;
+        y += vy * 2;
     }
 
-    // if the ball goes below that the score is updated and the away team gets a point
-    if (x <= 0) {
-    awayScore++;
-    updateScore();
-    resetBall();
+    if (collidesWithNpc1_1 || collidesWithNpc1_2 || collidesWithNpc2_1 || collidesWithNpc2_2) {
+    // Find which NPC was hit
+    let npc = null;
+
+    if (collidesWithNpc1_1) npc = Npc1_1Rect;
+    else if (collidesWithNpc1_2) npc = Npc1_2Rect;
+    else if (collidesWithNpc2_1) npc = Npc2_1Rect;
+    else if (collidesWithNpc2_2) npc = Npc2_2Rect;
+
+    // Calculate the centers
+    const ballCenterX = x + ballSize / 2;
+    const ballCenterY = y + ballSize / 2;
+
+    const npcCenterX = (npc.left + npc.right) / 2;
+    const npcCenterY = (npc.top + npc.bottom) / 2;
+
+    // Determine impact direction
+    const hitX = (ballCenterX - npcCenterX) / (npcSize / 2);
+    const hitY = (ballCenterY - npcCenterY) / (npcSize / 2);
+
+    // Reverse ball direction and add variation
+    vx = -vx;
+    vy += hitY * 3;
+    vx += hitX * 1.5;
+
+    // Add randomness to make collisions less predictable
+    vx += (Math.random() - 0.5) * 2;
+    vy += (Math.random() - 0.5) * 2;
+
+    // Nudge the ball slightly to avoid overlap
+    x += vx * 2;
+    y += vy * 2;
 }
 
-// if the ball goes above that the score is updated and the away team gets a point
-    if (x + ballSize >= 1450) {
-    homeScore++;
-    updateScore();
-    resetBall();
+    // check the goal scoring
+    if (x <= 0) {
+        awayScore++;
+        updateScore();
+        resetBall();
+    }
+
+    if (x + ballSize >= 1455) {
+        homeScore++;
+        updateScore();
+        resetBall();
+    }
 }
-}
+
 
 // here we combine all functions into 1 so it goes into the loop later 
 function gameLoop() {
     updateScore();
     movePlayer1();
     movePlayer2();
-    npc1_1Move()
     setPositionGoal();
+    npc1_1Move()
+    npc1_2Move()
+    npc2_1Move()
+    npc2_2Move()
     requestAnimationFrame(gameLoop);
 }
 
 
 // here we check if the key is pressed or not
 document.addEventListener("keydown", (event) => {
-    const key = event.key.toLowerCase();
+    const key = event.key.toLowerCase();  // <-- Use lowercase
     if (keys.hasOwnProperty(key)) {
         keys[key] = true;
     }
 });
 
 document.addEventListener("keyup", (event) => {
-    const key = event.key.toLowerCase();
+    const key = event.key.toLowerCase();  // <-- Use lowercase
     if (keys.hasOwnProperty(key)) {
         keys[key] = false;
     }
 });
+
+
 
 //here we start the loop and it calls the functions every 10ms
 setInterval(movementBall, 10);

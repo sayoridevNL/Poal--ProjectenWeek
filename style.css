@@ -1,63 +1,109 @@
-*{
-    margin: 0;
-    padding: 0;
-    background-color: aqua;
+:root {
+  --font-size: 16px;
+  --background: #004629;
+  --foreground: #000000;
+  --card: #ffffff;
+  --card-foreground: #000000;
+  --primary: #030213;
+  --secondary: #ececf0;
+  --accent: #e9ebef;
+  --border: rgb(255, 255, 255);
+  --radius: 10px;
+
+  --chart-2: #3b82f6;
+  --chart-3: #ef4444;
 }
 
+.dark {
+  --background: #0e0e0e;
+  --foreground: #ffffff;
+  --card: #1a1a1a;
+  --card-foreground: #ffffff;
+  --primary: #a3a3ff;
+  --secondary: #333;
+  --accent: #555;
+  --border: rgb(255, 255, 255);
+}
+
+/* base styles */
+* {
+  margin: 0;
+  padding: 0;
+  box-sizing: border-box;
+}
+
+body {
+  background-color: var(--background);
+  color: var(--foreground);
+  font-size: var(--font-size);
+  font-family: sans-serif;
+  padding: 20px;
+}
+
+/* Field */
 #veld {
-    width: 1450px;
-    height: 700px;
-    border: solid 5px black;
-    margin: 10px;
-    box-sizing: border-box;
-    background-color: white;
+  width: 1450px;
+  height: 700px;
+  border: 5px solid var(--border);
+  margin: 10px auto;
+  background-color: var(--card);
+  position: relative;
+  border-radius: var(--radius);
 }
 
-#ball{
-    height: 35px;
-    width: 35px;
-    border-radius: 100%;
-    background-color: white;
-    border: 2px solid black;
-    position: absolute;
-    
+/* Ball */
+#ball {
+  height: 35px;
+  width: 35px;
+  border-radius: 50%;
+  background-color: var(--foreground);
+  border: 2px solid var(--border);
+  position: absolute;
+  left: 50%;
+  top: 50%;
+  transform: translate(-50%, -50%);
 }
+
+/* Goals */
 
 #goal1 {
-    height: 500px;
-    width: 10px;
-    background-color: white;
-    position: absolute;
-    left: 10px;
-    top: 100px;
+  width: 10px;
+  left: 10px;
 }
 
 #goal2 {
-    height: 500px;
-    width: 5px;
-    background-color: white;
-    position: absolute;
-    left: 1455px;
-    top: 100px;
+  width: 5px;
+  left: 1455px;
 }
 
-#player1{
-    height: 50px;
-    width: 50px;
-    position: absolute;
-    left: 20px;
-    top: 350px;
-    background-color: blue;
-    border: solid 2px lightblue;
+/* Player 1 */
+#player1 {
+  height: 50px;
+  width: 50px;
+  position: absolute;
+  left: 20px;
+  top: 350px;
+  background-color: var(--chart-2); /* blue */
+  border: 2px solid lightblue;
+}
+
+/* Player 2 */
+#player2 {
+  height: 50px;
+  width: 50px;
+  position: absolute;
+  left: 1380px;
+  top: 350px;
+  background-color: var(--chart-3); /* red */
+  border: 2px solid lightcoral;
 }
 
 #npc1_1 {
     height: 50px;
     width: 50px;
     position: absolute;
-    left: 300px;
     top: 200px;
-    background-color: lightblue;
+    background-color: rgb(107, 218, 255);
     border: solid 2px blue;
 }
 
@@ -67,7 +113,7 @@
     position: absolute;
     left: 300px;
     top: 500px;
-    background-color: lightblue;
+    background-color: rgb(107, 218, 255);
     border: solid 2px blue;
 }
 
@@ -91,20 +137,149 @@
     border: solid 2px red;
 }
 
-#player2{
-    height: 50px;
-    width: 50px;
-    position: absolute;
-    left: 15px;
-    top: 350px;
-    background-color: red;
-    border: solid 2px lightcoral;
-}
-
 #middleLine{
     height: 690px;
     width: 5px;
-    background-color: black;
+    background-color: rgb(255, 255, 255);
     position: absolute;
-    left: 725px;
+    left: 750px;
+}
+
+#middlecircle{
+    height: 200px;
+    width: 200px;
+    position: absolute;
+    top: 250px;
+    border: solid 5px white;
+    border-radius: 100%;
+    left: 650px;
+}
+
+#line1{
+    width: 100px;
+    height: 690px;
+    position: absolute;
+    background-color: rgb(0, 178, 0);
+}
+
+#line2{
+    width: 100px;
+    height: 690px;
+    position: absolute;
+    left: 100px;
+    background-color: rgb(65, 255, 103);
+}
+
+#line3{
+    width: 100px;
+    height: 690px;
+    position: absolute;
+    left: 200px;
+    background-color: rgb(0, 178, 0);;
+}
+
+#line4{
+    width: 100px;
+    height: 690px;
+    position: absolute;
+    left: 300px;
+    background-color: rgb(65, 255, 103);
+}
+
+#line5{
+    width: 100px;
+    height: 690px;
+    position: absolute;
+    left: 400px;
+    background-color: rgb(0, 178, 0);;
+}
+
+#line6{
+    width: 100px;
+    height: 690px;
+    position: absolute;
+    left: 500px;
+    background-color: rgb(65, 255, 103);
+}
+
+#line7{
+    width: 100px;
+    height: 690px;
+    position: absolute;
+    left: 600px;
+    background-color: rgb(0, 178, 0);;
+}
+
+#line8{
+    width: 100px;
+    height: 690px;
+    position: absolute;
+    left: 700px;
+    background-color: rgb(65, 255, 103);
+}
+
+#line9{
+    width: 100px;
+    height: 690px;
+    position: absolute;
+    left: 800px;
+    background-color: rgb(0, 178, 0);
+}
+
+#line10{
+    width: 100px;
+    height: 690px;
+    position: absolute;
+    left: 900px;
+    background-color: rgb(65, 255, 103);
+}
+
+#line11{
+    width: 100px;
+    height: 690px;
+    position: absolute;
+    left: 1000px;
+    background-color: rgb(0, 178, 0);;
+}
+
+#line12{
+    width: 100px;
+    height: 690px;
+    position: absolute;
+    left: 1100px;
+    background-color: rgb(65, 255, 103);
+}
+
+#line13{
+    width: 100px;
+    height: 690px;
+    position: absolute;
+    left: 1200px;
+    background-color: rgb(0, 178, 0);;
+}
+
+#line14{
+    width: 100px;
+    height: 690px;
+    position: absolute;
+    left: 1300px;
+    background-color: rgb(65, 255, 103);
+}
+
+#line15{
+    width: 40px;
+    height: 690px;
+    position: absolute;
+    left: 1400px;
+    background-color: rgb(0, 178, 0);;
+}
+
+h1{
+    color: white;
+    text-align: center;
+}
+
+h2 {
+    color: white;
+    text-align: center;
 }
