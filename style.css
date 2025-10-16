@@ -61,4 +61,10 @@
     border: solid 2px lightcoral;
 }
 
-
+#middleLine{
+    height: 690px;
+    width: 5px;
+    background-color: black;
+    position: absolute;
+    left: 725px;
+}
