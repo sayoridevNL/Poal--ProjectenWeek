@@ -66,7 +66,7 @@ let npc2_2x = 1000;
 let npc2_2y = 500;
 
 // this sets the time at 0
-let time = 0;
+let lastTime = 0;
 
 // this is for the variable for keys they are false rn because they arent pressed 
 const keys = {
@@ -81,9 +81,9 @@ const keys = {
 };
 
 //  this function makes the ball move
-function movementBall() {
-    x += vx;
-    y += vy;
+function movementBall(deltaTime) {
+    x += vx * deltaTime;
+    y += vy * deltaTime;
 
     // random bounce for top and bottom walls
     if (y >= 665 || y <= 15) {
@@ -118,18 +118,19 @@ function movementBall() {
 
 
 // if a key is pressed the player moves 
-function movePlayer1() {
+function movePlayer1(deltaTime) {
+    const moveAmount = playerSpeed * deltaTime
     if (keys.w && player1y > 15) {
-        player1y -= playerSpeed;
+        player1y -= moveAmount;
     }
     if (keys.s && player1y < 635) {
-        player1y += playerSpeed;
+        player1y += moveAmount;
     }
     if (keys.a && player1x > 15) {
-        player1x -= playerSpeed;
+        player1x -= moveAmount;
     }
     if (keys.d && player1x < 690) {
-        player1x += playerSpeed;
+        player1x += moveAmount;
     }
 
     player1.style.left = player1x + 'px';
@@ -137,25 +138,26 @@ function movePlayer1() {
 }
 
 // same as by player 1
-function movePlayer2() {
+function movePlayer2(deltaTime) {
+     const moveAmount = playerSpeed * deltaTime
     if (keys.arrowup && player2y > 15) {
-        player2y -= playerSpeed;
+        player2y -= moveAmount;
     }
     if (keys.arrowdown && player2y < 635) {
-        player2y += playerSpeed;
+        player2y += moveAmount;
     }
     if (keys.arrowleft && player2x > 760) {
-        player2x -= playerSpeed;
+        player2x -= moveAmount;
     }
     if (keys.arrowright && player2x < 1385) {
-        player2x += playerSpeed;
+        player2x += moveAmount;
     }
 
     player2.style.left = player2x + 'px';
     player2.style.top = player2y + 'px';
 }
 
-function npc1_1Move() {
+function npc1_1Move(deltaTime) {
     npc1_1x += npc1_1Speed;
 
     // this is so the ball dont go outside the playing field
@@ -167,7 +169,7 @@ function npc1_1Move() {
     npc1_1.style.left = npc1_1x + 'px';
 }
 
-function npc1_2Move() {
+function npc1_2Move(deltaTime) {
     npc1_2y += npc1_2Speed;
 
     // this is so the ball dont go outside the playing field
@@ -179,7 +181,7 @@ function npc1_2Move() {
     npc1_2.style.top = npc1_2y + 'px';
 }
 
-function npc2_1Move() {
+function npc2_1Move(deltaTime) {
     npc2_1y += npc2_1Speed;
 
     // this is so the ball dont go outside the playing field
@@ -191,7 +193,7 @@ function npc2_1Move() {
     npc2_1.style.top = npc2_1y + 'px';
 }
 
-function npc2_2Move() {
+function npc2_2Move(deltaTime) {
     npc2_2x += npc2_2Speed;
 
     // this is so the ball dont go outside the playing field
@@ -226,12 +228,6 @@ function resetBall() {
     ball.style.top = y + 'px';
 }
 
-
-// here we have the timer and this function is in a loop so it counts up
-function setTimer() {
-    time += 1    
-    timer.innerHTML = "Time: " + time; 
-}
 
 // here we check if collision between ball and player happens
 function detectCollision() {
@@ -408,15 +404,22 @@ function detectCollision() {
 
 
 // here we combine all functions into 1 so it goes into the loop later 
-function gameLoop() {
+function gameLoop(timestamp) {
+    if (!lastTime) lastTime = timestamp;
+    const deltaTime = (timestamp - lastTime) / 16.67;
+    lastTime = timestamp
+
     updateScore();
-    movePlayer1();
-    movePlayer2();
+    movePlayer1(deltaTime);
+    movePlayer2(deltaTime);
     setPositionGoal();
-    npc1_1Move()
-    npc1_2Move()
-    npc2_1Move()
-    npc2_2Move()
+    npc1_1Move(deltaTime)
+    npc1_2Move(deltaTime)
+    npc2_1Move(deltaTime)
+    npc2_2Move(deltaTime)
+    movementBall(deltaTime)
+
+
     requestAnimationFrame(gameLoop);
 }
 
@@ -439,5 +442,4 @@ document.addEventListener("keyup", (event) => {
 
 
 //here we start the loop and it calls the functions every 10ms
-setInterval(movementBall, 10);
 requestAnimationFrame(gameLoop);
