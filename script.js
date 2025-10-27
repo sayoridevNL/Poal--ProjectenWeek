@@ -67,6 +67,9 @@ let npc2_2y = 500;
 
 // this sets the time at 0
 let lastTime = 0;
+let time = 0;
+let gameDuration = 120
+let gameActive = true;
 
 // this is for the variable for keys they are false rn because they arent pressed 
 const keys = {
@@ -158,11 +161,11 @@ function movePlayer2(deltaTime) {
 }
 
 function npc1_1Move(deltaTime) {
-    npc1_1x += npc1_1Speed * deltaTime;
+    npc1_1x += npc1_1Speed;
 
     // this is so the ball dont go outside the playing field
     if (npc1_1x >= 550 || npc1_1x <= 150) {
-        npc1_1Speed = -npc1_1Speed * deltaTime;
+        npc1_1Speed = -npc1_1Speed;
     } 
     console.log(npc1_1)
 
@@ -170,11 +173,11 @@ function npc1_1Move(deltaTime) {
 }
 
 function npc1_2Move(deltaTime) {
-    npc1_2y += npc1_2Speed * deltaTime;
+    npc1_2y += npc1_2Speed;
 
     // this is so the ball dont go outside the playing field
     if (npc1_2y >= 600 || npc1_2y <= 300) {
-        npc1_2Speed = -npc1_2Speed * deltaTime;
+        npc1_2Speed = -npc1_2Speed;
     } 
 
 
@@ -182,11 +185,11 @@ function npc1_2Move(deltaTime) {
 }
 
 function npc2_1Move(deltaTime) {
-    npc2_1y += npc2_1Speed * deltaTime;
+    npc2_1y += npc2_1Speed;
 
     // this is so the ball dont go outside the playing field
     if (npc2_1y >= 400 || npc2_1y <= 100) {
-        npc2_1Speed = -npc2_1Speed * deltaTime;
+        npc2_1Speed = -npc2_1Speed;
     } 
 
 
@@ -194,11 +197,11 @@ function npc2_1Move(deltaTime) {
 }
 
 function npc2_2Move(deltaTime) {
-    npc2_2x += npc2_2Speed * deltaTime;
+    npc2_2x += npc2_2Speed;
 
     // this is so the ball dont go outside the playing field
     if (npc2_2x >= 1250 || npc2_2x <= 850) {
-        npc2_2Speed = -npc2_2Speed * deltaTime;
+        npc2_2Speed = -npc2_2Speed;
     } 
     console.log(npc2_2)
 
@@ -227,6 +230,48 @@ function resetBall() {
     ball.style.left = x + 'px';
     ball.style.top = y + 'px';
 }
+
+function setTimer() {
+    if (!gameActive) return;
+
+    time +=1;
+    timer.innerHTML = "Time: " + time;
+
+    if (time >= gameDuration) {
+        endGame()
+    }
+}
+
+function endGame() {
+    gameActive = false
+
+    vx = 0;
+    vy = 0
+
+    let resultText = "";
+    if (homeScore > awayScore) {
+        resultText = "Home Team Wins"
+    } else if (homeScore < awayScore) {
+        resultText = "Away Team Wins"
+    }
+
+    const popup = document.getElementById("gameOverPopup")
+    const popupScore = document.getElementById("popupScore")
+    popupScore.innerHTML = `Final Score: ${homeScore} - ${awayScore}<br>${resultText}`;
+    popup.style.display = "flex"
+}
+
+document.getElementById("replayBtn").addEventListener("click", () => {
+    homeScore = 0;
+    awayScore = 0;
+    time = 0;
+    gameActive;
+
+    updateScore();
+    resetBall();
+
+    document.getElementById("gameOverPopup").style.display = "none";
+})
 
 
 // here we check if collision between ball and player happens
@@ -443,3 +488,4 @@ document.addEventListener("keyup", (event) => {
 
 //here we start the loop and it calls the functions every 10ms
 requestAnimationFrame(gameLoop);
+setInterval(setTimer, 1000)
