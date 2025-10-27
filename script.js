@@ -74,7 +74,7 @@ let npc2_2y = 500;
 // this sets the time at 0
 let lastTime = 0;
 let time = 0;
-let gameDuration = 120
+let gameDuration = 12
 let gameActive = true;
 
 // this is for the variable for keys they are false rn because they arent pressed 
@@ -138,7 +138,7 @@ function movePlayer1(deltaTime) {
     if (keys.a && player1x > 15) {
         player1x -= moveAmount;
     }
-    if (keys.d && player1x < 690) {
+    if (keys.d && player1x < 665) {
         player1x += moveAmount;
     }
 
@@ -155,7 +155,7 @@ function movePlayer2(deltaTime) {
     if (keys.arrowdown && player2y < 635) {
         player2y += moveAmount;
     }
-    if (keys.arrowleft && player2x > 760) {
+    if (keys.arrowleft && player2x > 740) {
         player2x -= moveAmount;
     }
     if (keys.arrowright && player2x < 1385) {
@@ -298,6 +298,16 @@ document.getElementById("replayBtn").addEventListener("click", () => {
     npc1_2Direction = 1;
     npc2_1Direction = 1;
     npc2_2Direction = 1;
+
+    player1x = 15;
+    player1y = 350;
+    player2x = 1375;
+    player2y = 350;
+
+    player1.style.left = player1x + 'px';
+    player1.style.top = player1y + 'px';
+    player2.style.left = player2x + 'px';
+    player2.style.top = player2y + 'px';
 
     updateScore();
     resetBall();
