@@ -55,6 +55,12 @@ let npc1_2Speed = 5;
 let npc2_1Speed = 5;
 let npc2_2Speed = 5;
 
+let npc1_1Direction = 1;
+let npc1_2Direction = 1;
+let npc2_1Direction = 1;
+let npc2_2Direction = 1;
+
+
 //this is for the locations of the npc
 let npc1_1x = 300;
 let npc1_1y = 200;
@@ -68,7 +74,7 @@ let npc2_2y = 500;
 // this sets the time at 0
 let lastTime = 0;
 let time = 0;
-let gameDuration = 12
+let gameDuration = 120
 let gameActive = true;
 
 // this is for the variable for keys they are false rn because they arent pressed 
@@ -161,52 +167,67 @@ function movePlayer2(deltaTime) {
 }
 
 function npc1_1Move(deltaTime) {
-    npc1_1x += npc1_1Speed;
+    npc1_1x += npc1_1Speed * deltaTime * npc1_1Direction;
 
-    // this is so the ball dont go outside the playing field
-    if (npc1_1x >= 550 || npc1_1x <= 150) {
-        npc1_1Speed = -npc1_1Speed;
-    } 
-    console.log(npc1_1)
+    if (npc1_1x > 550) {
+        npc1_1x = 550;
+        npc1_1Direction = -1;
+    } else if (npc1_1x < 150) {
+        npc1_1x = 150;
+        npc1_1Direction = 1;
+    }
 
     npc1_1.style.left = npc1_1x + 'px';
 }
 
+
+
 function npc1_2Move(deltaTime) {
-    npc1_2y += npc1_2Speed;
+    npc1_2y += npc1_2Speed * deltaTime * npc1_2Direction;
 
-    // this is so the ball dont go outside the playing field
-    if (npc1_2y >= 600 || npc1_2y <= 300) {
-        npc1_2Speed = -npc1_2Speed;
-    } 
-
+    if (npc1_2y > 600) {
+        npc1_2y = 600;
+        npc1_2Direction = -1;
+    } else if (npc1_2y < 300) {
+        npc1_2y = 300;
+        npc1_2Direction = 1;
+    }
 
     npc1_2.style.top = npc1_2y + 'px';
 }
 
+
+
 function npc2_1Move(deltaTime) {
-    npc2_1y += npc2_1Speed;
+    npc2_1y += npc2_1Speed * deltaTime * npc2_1Direction;
 
-    // this is so the ball dont go outside the playing field
-    if (npc2_1y >= 400 || npc2_1y <= 100) {
-        npc2_1Speed = -npc2_1Speed;
-    } 
-
+    if (npc2_1y > 400) {
+        npc2_1y = 400;
+        npc2_1Direction = -1;
+    } else if (npc2_1y < 100) {
+        npc2_1y = 100;
+        npc2_1Direction = 1;
+    }
 
     npc2_1.style.top = npc2_1y + 'px';
 }
 
-function npc2_2Move(deltaTime) {
-    npc2_2x += npc2_2Speed;
 
-    // this is so the ball dont go outside the playing field
-    if (npc2_2x >= 1250 || npc2_2x <= 850) {
-        npc2_2Speed = -npc2_2Speed;
-    } 
-    console.log(npc2_2)
+
+function npc2_2Move(deltaTime) {
+    npc2_2x += npc2_2Speed * deltaTime * npc2_2Direction;
+
+    if (npc2_2x > 1250) {
+        npc2_2x = 1250;
+        npc2_2Direction = -1;
+    } else if (npc2_2x < 850) {
+        npc2_2x = 850;
+        npc2_2Direction = 1;
+    }
 
     npc2_2.style.left = npc2_2x + 'px';
 }
+
 
 // here we set the location of the goal
 function setPositionGoal() {
@@ -248,6 +269,12 @@ function endGame() {
     vx = 0;
     vy = 0
 
+    npc1_1Direction = 0;
+    npc1_2Direction = 0;
+    npc2_1Direction = 0;
+    npc2_2Direction = 0;
+    
+
     let resultText = "";
     if (homeScore > awayScore) {
         resultText = "Home Team Wins"
@@ -266,6 +293,11 @@ document.getElementById("replayBtn").addEventListener("click", () => {
     awayScore = 0;
     time = 0;
     gameActive = true;
+
+    npc1_1Direction = 1;
+    npc1_2Direction = 1;
+    npc2_1Direction = 1;
+    npc2_2Direction = 1;
 
     updateScore();
     resetBall();
@@ -451,7 +483,7 @@ function detectCollision() {
 // here we combine all functions into 1 so it goes into the loop later 
 function gameLoop(timestamp) {
     if (!lastTime) lastTime = timestamp;
-    const deltaTime = (timestamp - lastTime) / 16.67;
+    const deltaTime = (timestamp - lastTime) / 8.33;
     lastTime = timestamp
 
     updateScore();
