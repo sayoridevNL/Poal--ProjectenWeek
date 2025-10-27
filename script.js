@@ -158,7 +158,7 @@ function movePlayer2(deltaTime) {
 }
 
 function npc1_1Move(deltaTime) {
-    npc1_1x += npc1_1Speed;
+    npc1_1x += npc1_1Speed * deltaTime;
 
     // this is so the ball dont go outside the playing field
     if (npc1_1x >= 550 || npc1_1x <= 150) {
@@ -170,7 +170,7 @@ function npc1_1Move(deltaTime) {
 }
 
 function npc1_2Move(deltaTime) {
-    npc1_2y += npc1_2Speed;
+    npc1_2y += npc1_2Speed * deltaTime;
 
     // this is so the ball dont go outside the playing field
     if (npc1_2y >= 600 || npc1_2y <= 300) {
@@ -182,7 +182,7 @@ function npc1_2Move(deltaTime) {
 }
 
 function npc2_1Move(deltaTime) {
-    npc2_1y += npc2_1Speed;
+    npc2_1y += npc2_1Speed * deltaTime;
 
     // this is so the ball dont go outside the playing field
     if (npc2_1y >= 400 || npc2_1y <= 100) {
@@ -194,7 +194,7 @@ function npc2_1Move(deltaTime) {
 }
 
 function npc2_2Move(deltaTime) {
-    npc2_2x += npc2_2Speed;
+    npc2_2x += npc2_2Speed * deltaTime;
 
     // this is so the ball dont go outside the playing field
     if (npc2_2x >= 1250 || npc2_2x <= 850) {
