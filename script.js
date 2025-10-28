@@ -50,7 +50,7 @@ const npcSize = 50;
 const goalWidth = 10;
 const goalHeight = 500;
 
-let goal1x = 4; // left goal matches CSS left: 4px;
+let goal1x = 0; // left goal matches CSS left: 4px;
 let goal1y = 100;
 
 let goal2x = fieldWidth - goalWidth - 8; // 1450 - 10 - 4 = 1436
