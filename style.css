@@ -104,6 +104,7 @@ body {
   position: absolute;
   border-radius: 8px;
   transition: transform 0.05s ease;
+  z-index: 999;
 }
 
 /* Player 1 - blue team */
