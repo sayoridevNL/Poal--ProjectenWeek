@@ -9,7 +9,7 @@
   --npc-red: #f87171;
   --ball-color: #fff;
   --ball-shadow: rgba(0, 0, 0, 0.3);
-  --powerup-gold: #ffd700;
+  --powerup-gold: rgb(255, 215, 0);
   --font: "Poppins", sans-serif;
 }
 
@@ -71,6 +71,22 @@ body {
   box-shadow: 0 0 20px rgba(255,255,255,0.4);
 }
 
+.powerup{
+  background: var(--powerup-gold);
+  border: 2px solid #ffed86;
+  box-shadow: 0 0 20px rgba(255, 238, 0, 0.623);
+  font-size: 29px;
+  font-weight: bold;
+  font-family: Arial, Helvetica, sans-serif;
+  height: 35px;
+  width: 35px;
+  display: none;
+  position: absolute;
+  border-radius: 8px;
+  transition: transform 0.05s ease;
+  z-index: 999;
+}
+
 /* goals */
 #goal1 {
   position: absolute;
@@ -98,7 +114,7 @@ body {
 /* Players */
 #player1, #player2,
 #npc1_1, #npc1_2,
-#npc2_1, #npc2_2 {
+#npc2_1, #npc2_2{
   height: 50px;
   width: 50px;
   position: absolute;

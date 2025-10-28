@@ -42,7 +42,7 @@ const goalwidth = 5;
 const goalheight = 100;
 
 // this is for the player speed
-const playerSpeed = 7;
+let playerSpeed = 7;
 
 const npcSize = 50;
 
@@ -83,6 +83,13 @@ let lastTime = 0;
 let time = 0;
 let gameDuration = 120
 let gameActive = true;
+
+const powerUp = document.getElementById("powerup1")
+const powerUpSize = 35;
+let powerUpActive = false;
+let powerUpX = 0;
+let powerUpY = 0;
+let powerUpType = 0;
 
 // this is for the variable for keys they are false rn because they arent pressed 
 const keys = {
@@ -270,6 +277,99 @@ function setTimer() {
     }
 }
 
+function spawnPowerup() {
+    if (!gameActive) return;
+
+    powerUpType = Math.floor(Math.random() * 5) + 1;
+
+    powerUpX = Math.random() *  (fieldWidth - powerUpSize);
+    powerUpY = Math.random() *  (fieldHeight - powerUpSize);
+
+    powerUp.style.left = powerUpX + "px"
+    powerUp.style.top = powerUpY + "px"
+    powerUp.style.display = "block"
+    powerUpActive = true
+
+    setTimeout(() => {
+        if (powerUpActive) {
+            powerUp.style.display = "none";
+            powerUpActive = false;
+        }
+    }, 5000)
+}
+
+function applyPowerup(player, type) {
+    switch (type) {
+        case 1:
+            playerSpeed *= 2;
+            setTimeout(() => {
+                playerSpeed /= 2
+            }, 10000)
+            break;
+        
+        case 2:
+            npc1_1Speed *= 2;
+            npc1_2Speed *= 2;
+            npc2_1Speed *= 2;
+            npc2_2Speed *= 2;
+            setTimeout(() => {
+                npc1_1Speed /= 2;
+                npc1_2Speed /= 2;
+                npc2_1Speed /= 2;
+                npc2_2Speed /= 2;
+            }, 10000)
+            break;
+
+        case 3:
+            playerSpeed *= 2;
+            setTimeout(() => playerSpeed /= 2, 10000)
+            break;
+
+        case 4: 
+            npc1_1Speed = 0;
+            npc1_2Speed = 0;
+            npc2_1Speed = 0;
+            npc2_2Speed = 0;
+            setTimeout(() => {
+                npc1_1Speed = 5;
+                npc1_2Speed = 5;
+                npc2_1Speed = 5;
+                npc2_2Speed = 5;
+            }, 10000);
+            break;
+
+        case 5: 
+        const originalMovePlayer1 = movePlayer1;
+        const originalMovePlayer2 = movePlayer2;
+
+        movePlayer1 = function(deltaTime) {
+            const moveAmount = playerSpeed * deltaTime;
+            if (keys.w && player1y < 635) player1y += moveAmount;
+            if (keys.s && player1y > 15) player1y -= moveAmount;
+            if (keys.a && player1x < 665) player1x += moveAmount;
+            if (keys.d && player1x > 15) player1x -= moveAmount;
+            player1.style.left = player1x + 'px';
+            player1.style.top = player1y + 'px';
+        };
+
+        movePlayer2 = function(deltaTime) {
+            const moveAmount = playerSpeed * deltaTime;
+            if (keys.arrowup && player2y < 635) player2y += moveAmount;
+            if (keys.arrowdown && player2y > 15) player2y -= moveAmount;
+            if (keys.arrowleft && player2x < 1385) player2x += moveAmount;
+            if (keys.arrowright && player2x > 740) player2x -= moveAmount;
+            player2.style.left = player2x + 'px';
+            player2.style.top = player2y + 'px';
+        };
+
+        setTimeout(() => {
+            movePlayer1 = originalMovePlayer1;
+            movePlayer2 = originalMovePlayer2;
+        }, 10000);
+        break;
+    }
+}
+
 function endGame() {
     gameActive = false
 
@@ -388,7 +488,18 @@ function detectCollision() {
         bottom: goal2y + goalHeight
     };
 
+let powerupRect = null;
+if (powerUpActive) {
+    powerupRect = {
+        left: powerUpX,
+        right: powerUpX + powerUpSize,
+        top: powerUpY,
+        bottom: powerUpY + powerUpSize
+    };
+}
 
+let hitP1 = false;
+let hitP2 = false;
     const collidesWithPlayer1 = !(
         player1Rect.right < ballRect.left ||
         player1Rect.left > ballRect.right ||
@@ -444,6 +555,22 @@ function detectCollision() {
         goal2Rect.bottom < ballRect.top ||
         goal2Rect.top > ballRect.bottom
     );
+
+if (powerupRect) {
+    hitP1 = !(
+        player1Rect.right < powerupRect.left ||
+        player1Rect.left > powerupRect.right ||
+        player1Rect.bottom < powerupRect.top ||
+        player1Rect.top > powerupRect.bottom
+    );
+
+    hitP2 = !(
+        player2Rect.right < powerupRect.left ||
+        player2Rect.left > powerupRect.right ||
+        player2Rect.bottom < powerupRect.top ||
+        player2Rect.top > powerupRect.bottom
+    );
+}
 
     if (collidesWithPlayer1 || collidesWithPlayer2) {
         const player = collidesWithPlayer1 ? player1Rect : player2Rect;
@@ -522,13 +649,20 @@ function detectCollision() {
         updateScore();
         resetBall();
     }
+
+    if (hitP1 || hitP2) {
+        applyPowerup(hitP1 ? 1 : 2, powerUpType);
+        powerUp.style.display = "none";
+        powerUpActive = false;
+    }
+    
 }
 
 
 // here we combine all functions into 1 so it goes into the loop later 
 function gameLoop(timestamp) {
     if (!lastTime) lastTime = timestamp;
-    const deltaTime = (timestamp - lastTime) / 8.33;
+    const deltaTime = (timestamp - lastTime) / 10;
     lastTime = timestamp
 
     updateScore();
@@ -567,3 +701,5 @@ document.addEventListener("keyup", (event) => {
 setPositionGoal();
 requestAnimationFrame(gameLoop);
 setInterval(setTimer, 1000)
+setInterval(spawnPowerup, 20000);
+setInterval(detectCollision, 10);
