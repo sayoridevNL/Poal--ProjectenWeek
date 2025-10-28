@@ -38,6 +38,7 @@ body {
   border-radius: 20px;
   background: linear-gradient(90deg, var(--field-green-dark) 0%, var(--field-green-light) 100%);
   border: 4px solid var(--white-line);
+  z-index: 700px;
   box-shadow: 0 0 40px rgba(0, 255, 100, 0.3);
 }
 
@@ -111,8 +112,8 @@ body {
 }
 
 #player1, #player2{
-  height: 75px;
-  width: 75px;
+  height: 50px;
+  width: 50px;
   position: absolute;
   border-radius: 8px;
   transition: transform 0.05s ease;
