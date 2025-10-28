@@ -108,19 +108,31 @@ function movementBall(deltaTime) {
     x += vx * deltaTime;
     y += vy * deltaTime;
 
-    // random bounce for top and bottom walls
-    if (y >= 665 || y <= 15) {
-        vy = -vy;
-        vx += (Math.random() - 0.5) * 2;
+    // bounce for top and bottom walls
+    if (y <= 0) {
+        y = 0; // clamp inside
+        vy = Math.abs(vy); // go downward
+    } else if (y + ballSize >= fieldHeight) {
+        y = fieldHeight - ballSize;
+        vy = -Math.abs(vy); // go upward
     }
 
-    // random bounce for left and right wall (goal check is handled in detectCollision)
-    if (x >= 1455 || x <= 0) {
-        vx = -vx;
-        vy += (Math.random() - 0.5) * 2;
+    // bounce for left and right walls
+    if (x <= 0) {
+        x = 0;
+        vx = Math.abs(vx); // go right
+    } else if (x + ballSize >= fieldWidth) {
+        x = fieldWidth - ballSize;
+        vx = -Math.abs(vx); // go left
     }
 
-    // limit speed so it doesnt go too crazy
+    // add small random variation to avoid stuck trajectories
+    if (Math.random() < 0.05) {
+        vx += (Math.random() - 0.5) * 0.5;
+        vy += (Math.random() - 0.5) * 0.5;
+    }
+
+    // limit speed
     const maxSpeed = 12;
     const minSpeed = 5;
     const speed = Math.sqrt(vx * vx + vy * vy);
@@ -132,7 +144,7 @@ function movementBall(deltaTime) {
         vy = (vy / speed) * minSpeed;
     }
 
-
+    // update visual position
     ball.style.left = x + 'px';
     ball.style.top = y + 'px';
 
@@ -702,4 +714,4 @@ setPositionGoal();
 requestAnimationFrame(gameLoop);
 setInterval(setTimer, 1000)
 setInterval(spawnPowerup, 20000);
-setInterval(detectCollision, 5);
+setInterval(detectCollision, 10);
