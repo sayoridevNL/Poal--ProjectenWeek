@@ -110,9 +110,16 @@ body {
   right: 8px; 
 }
 
+#player1, #player2{
+  height: 75px;
+  width: 75px;
+  position: absolute;
+  border-radius: 8px;
+  transition: transform 0.05s ease;
+  z-index: 999;
+}
 
 /* Players */
-#player1, #player2,
 #npc1_1, #npc1_2,
 #npc2_1, #npc2_2{
   height: 50px;

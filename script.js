@@ -32,7 +32,7 @@ let player2x = 1375;
 let player2y = 350;
 
 // This is for the size of the player 
-const playerSize = 50;
+const playerSize = 75;
 
 //this is for the size of the ball
 const ballSize = 35;
@@ -163,10 +163,10 @@ function movePlayer1(deltaTime) {
 // same as by player 1
 function movePlayer2(deltaTime) {
      const moveAmount = playerSpeed * deltaTime
-    if (keys.arrowup && player2y > 15) {
+    if (keys.arrowup && player2y > 40) {
         player2y -= moveAmount;
     }
-    if (keys.arrowdown && player2y < 635) {
+    if (keys.arrowdown && player2y < 620) {
         player2y += moveAmount;
     }
     if (keys.arrowleft && player2x > 740) {
