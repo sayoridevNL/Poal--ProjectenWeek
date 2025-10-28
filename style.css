@@ -72,23 +72,28 @@ body {
 }
 
 /* goals */
-#goal1, #goal2 {
-  position: absolute;
-  top: 300px;
-  width: 8px;
-  height: 100px;
-  background-color: var(--white-line);
-  box-shadow: 0 0 10px rgba(255,255,255,0.8);
-  border-radius: 2px;
-}
-
 #goal1 {
-  left: 0;
+  position: absolute;
+  width: 10px;
+  height: 500px;
+  background-color: var(--white-line);
+  box-shadow: 0 0 10px rgba(255, 255, 255, 0.8);
+  border-radius: 2px;
+  top: 100px;
+  left: 4px;
 }
 
 #goal2 {
-  right: 0;
+  position: absolute;
+  width: 10px;
+  height: 500px;
+  background-color: var(--white-line);
+  box-shadow: 0 0 10px rgba(255, 255, 255, 0.8);
+  border-radius: 2px;
+  top: 100px;
+  right: 8px; 
 }
+
 
 /* Players */
 #player1, #player2,

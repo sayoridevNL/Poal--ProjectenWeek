@@ -11,6 +11,9 @@ const npc1_2 = document.getElementById("npc1_2")
 const npc2_1 = document.getElementById("npc2_1")
 const npc2_2 = document.getElementById("npc2_2")
 
+const fieldWidth = 1450;
+const fieldHeight = 700;
+
 // The X and Y are for the location of the ball 
 let x = 750;
 let y = 350;
@@ -44,9 +47,13 @@ const playerSpeed = 7;
 const npcSize = 50;
 
 // this is for the location  of both goals
-let goal1x = 10;
+const goalWidth = 10;
+const goalHeight = 500;
+
+let goal1x = 4; // left goal matches CSS left: 4px;
 let goal1y = 100;
-let goal2x = 1500;
+
+let goal2x = fieldWidth - goalWidth - 8; // 1450 - 10 - 4 = 1436
 let goal2y = 100;
 
 // this sets the speed for the npc
@@ -367,6 +374,20 @@ function detectCollision() {
         bottom: npc2_2y + npcSize
     };
 
+    const goal1Rect = {
+        left: goal1x,
+        right: goal1x + goalWidth,
+        top: goal1y,
+        bottom: goal1y + goalHeight
+    };
+
+    const goal2Rect = {
+        left: goal2x,
+        right: goal2x + goalWidth,
+        top: goal2y,
+        bottom: goal2y + goalHeight
+    };
+
 
     const collidesWithPlayer1 = !(
         player1Rect.right < ballRect.left ||
@@ -408,6 +429,20 @@ function detectCollision() {
         Npc2_2Rect.left > ballRect.right ||
         Npc2_2Rect.bottom < ballRect.top ||
         Npc2_2Rect.top > ballRect.bottom
+    );
+
+    const collidesWithGoal1 = !(
+        goal1Rect.right < ballRect.left ||
+        goal1Rect.left > ballRect.right ||
+        goal1Rect.bottom < ballRect.top ||
+        goal1Rect.top > ballRect.bottom
+    );
+
+    const collidesWithGoal2 = !(
+        goal2Rect.right < ballRect.left ||
+        goal2Rect.left > ballRect.right ||
+        goal2Rect.bottom < ballRect.top ||
+        goal2Rect.top > ballRect.bottom
     );
 
     if (collidesWithPlayer1 || collidesWithPlayer2) {
@@ -476,13 +511,13 @@ function detectCollision() {
 }
 
     // check the goal scoring
-    if (x <= 0) {
+    if (collidesWithGoal1) {
         awayScore++;
         updateScore();
         resetBall();
     }
 
-    if (x + ballSize >= 1455) {
+    if (collidesWithGoal2) {
         homeScore++;
         updateScore();
         resetBall();
@@ -529,5 +564,6 @@ document.addEventListener("keyup", (event) => {
 
 
 //here we start the loop and it calls the functions every 10ms
+setPositionGoal();
 requestAnimationFrame(gameLoop);
 setInterval(setTimer, 1000)
