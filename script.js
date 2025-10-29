@@ -14,7 +14,6 @@ const startMenu = document.getElementById("startMenu")
 const startBtn = document.getElementById("startBtn")
 const backToMenuBtn = document.getElementById("backToMenuBtn")
 const bgMusic = document.getElementById("bgMusic")
-const GoalTune = document.getElementById("GoalTune")
 const countrySelectPopup = document.getElementById('countrySelectPopup');
 const countryStartBtn = document.getElementById('countryStartBtn');
 const randomizeBtn = document.getElementById('randomize');
@@ -814,12 +813,10 @@ if (powerupRect) {
         awayScore++;
         updateScore();
         resetBall();
-        GoalTune.play()
     } else if (collidesWithGoal2) {
         homeScore++;
         updateScore();
         resetBall();
-        GoalTune.play()
     }
 
     if (hitP1 || hitP2) {
