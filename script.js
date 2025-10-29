@@ -447,15 +447,13 @@ function applyPowerup(player, type) {
             break;
 
         case 3:
-            x *= 2;
-            y *= 2;
-            powerText.innerHTML = "The Ball Speed is x2 for 10 seconds"
+            playerSpeed = 0;
+            powerText.innerHTML = "players are frozen for 10 seconds"
             setTimeout(() => {
                 powerText.innerHTML = " "
             }, 3000)
             setTimeout(() => {
-                x /= 2;
-                y /= 2;
+                playerSpeed = 7;
             }, 10000)
             break;
 
