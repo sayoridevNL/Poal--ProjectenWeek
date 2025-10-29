@@ -8,7 +8,33 @@
     
 </head>
 <body>
-    
+    <audio id="bgMusic" loop>
+        <source src="audio/Eya Eya Autistic Song - Puchaa.ogg" type="audio/mpeg">
+    </audio>
+    <div id="startMenu">
+       <div id="Beginscherm">
+            <img src="images/logo_poal.png"></img>
+            <!--start en settings button-->
+            <div class="button-container">
+                <button id="startBtn" style="vertical-align:middle"><span>Start</span></button>
+                <!-- Openknop settings -->
+                <button id="settingsBtn" style="vertical-align:middle" onclick="openNav()">Settings</button>
+            </div>
+
+            <!--the overlay-->
+            <div id="myNav" class="overlay">
+
+                <!--button om de overlay the sluiten-->
+                <a href="javascript:void(0)" class="closebtn" onclick="closeNav()">&times;</a>
+
+                <div class="overlay-content"> 
+                    <a href="#">Nummer 1</a>
+                    <a href="#">Nummer 2</a>
+                    <a href="#">Nummer 3</a>
+                </div>
+            </div>
+        </div> 
+    </div>
     <div id="veld">
         <div id="goal1"></div>
         <div id="goal2"></div>
@@ -32,6 +58,7 @@
             <h2 id="popupTitle">Game Over!</h2>
             <p id="popupScore"></p>
             <button id="replayBtn">rematch</button>
+            <button id="backToMenuBtn">Back to Menu</button>
         </div>
     </div>
     <script src="script.js"></script>

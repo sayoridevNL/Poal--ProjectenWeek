@@ -29,6 +29,107 @@ body {
   overflow-x: hidden;
 }
 
+/* === Start Menu Popup === */
+#startMenu {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  background: rgba(0, 14, 95, 0.705); /* dark transparent overlay */
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  z-index: 9999;
+}
+
+/* === Inner Box of the Menu === */
+#BeginScherm {
+  background: #fff;
+  padding: 40px;
+  border-radius: 20px;
+  text-align: center;
+  box-shadow: 0 0 30px rgba(0, 26, 255, 0.3);
+}
+
+ #startMenu img {
+    width: 450px;
+    height: 250px;
+}
+
+#BeginScherm h1 {
+    color: white;
+    text-align: center;
+    margin-top: 75px;
+    font-size: 105px;
+    font-family: Cambria, Cochin, Georgia, Times, 'Times New Roman', serif;
+}
+
+#BeginScherm .button-container {
+  display: flex;
+  flex-direction: column;
+  gap: 15px;
+}
+
+#startBtn, #settingsBtn {
+    display: block;
+    margin: 10px auto;
+    width: 350px;
+    background-color: rgb(255, 255, 255);
+    color: rgb(0, 0, 0);
+    padding: 10px 100px;
+    text-align: center;
+    text-decoration: none;
+    font-size: 20px;
+    cursor: pointer;
+    font-family: Impact, Haettenschweiler, 'Arial Narrow Bold', sans-serif;
+}
+
+#BeginScherm button:hover {
+  background-color: #0056b3;
+}
+
+/* === Settings Overlay (if not already in your CSS) === */
+.overlay {
+  height: 0%;
+  width: 100%;
+  position: fixed;
+  z-index: 10000;
+  top: 0;
+  left: 0;
+  background-color: rgba(0,0,0,0.9);
+  overflow-y: hidden;
+  transition: 0.5s;
+}
+
+.overlay-content {
+  position: relative;
+  top: 25%;
+  width: 100%;
+  text-align: center;
+}
+
+.overlay-content a {
+  padding: 8px;
+  text-decoration: none;
+  font-size: 2em;
+  color: #fff;
+  display: block;
+  transition: 0.3s;
+}
+
+.overlay-content a:hover {
+  color: #ff9800;
+}
+
+.closebtn {
+  position: absolute;
+  top: 20px;
+  right: 45px;
+  font-size: 3em;
+  color: #fff;
+}
+
 /* veld */
 #veld {
   width: 1450px;
@@ -221,7 +322,6 @@ h2 {
   font-weight: 400;
 }
 
-/* popup */
 .popup {
   position: fixed;
   top: 0;

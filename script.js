@@ -10,6 +10,10 @@ const npc1_1 = document.getElementById("npc1_1")
 const npc1_2 = document.getElementById("npc1_2")
 const npc2_1 = document.getElementById("npc2_1")
 const npc2_2 = document.getElementById("npc2_2")
+const startMenu = document.getElementById("startMenu")
+const startBtn = document.getElementById("startBtn")
+const backToMenuBtn = document.getElementById("backToMenuBtn")
+const bgMusic = document.getElementById("bgMusic")
 
 const fieldWidth = 1450;
 const fieldHeight = 700;
@@ -82,7 +86,9 @@ let npc2_2y = 500;
 let lastTime = 0;
 let time = 0;
 let gameDuration = 120
-let gameActive = true;
+let gameActive = false;
+let gamePaused = true;
+let gameLoopRunning = false;
 
 const powerUp = document.getElementById("powerup1")
 const powerUpSize = 35;
@@ -102,6 +108,26 @@ const keys = {
     arrowdown: false,
     arrowright: false
 };
+
+const originalRequestAnimationFrame = window.requestAnimationFrame;
+    window.requestAnimationFrame = function(callback) {
+      if (!gamePaused) {
+        return originalRequestAnimationFrame(callback);
+      }
+    };
+
+    startBtn.addEventListener("click", () => {
+        startMenu.style.display = "none";
+        gamePaused = false;
+        gameActive = true;
+
+        bgMusic.volume = 0.5
+        bgMusic.play()
+        if (!gameLoopRunning) {
+            gameLoopRunning = true;
+            requestAnimationFrame(gameLoop);
+        }
+    })
 
 //  this function makes the ball move
 function movementBall(deltaTime) {
@@ -433,6 +459,20 @@ document.getElementById("replayBtn").addEventListener("click", () => {
 
     document.getElementById("gameOverPopup").style.display = "none";
 })
+
+backToMenuBtn.addEventListener("click", () => {
+      document.getElementById("gameOverPopup").style.display = "none";
+      startMenu.style.display = "flex";
+      gamePaused = true;
+      gameActive = false;
+      vx = 0;
+      vy = 0;
+      homeScore = 0;
+      awayScore = 0;
+      time = 0;
+      updateScore();
+      resetBall();
+    });
 
 
 // here we check if collision between ball and player happens
