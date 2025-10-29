@@ -446,14 +446,15 @@ function applyPowerup(player, type) {
             break;
 
         case 3:
-            playerSpeed = 0;
-            powerText.innerHTML = "players are frozen for 10 seconds"
+            playerSpeed *= 2;
+            powerText.innerHTML = "The Player Speed is x2 for 10 seconds"
             setTimeout(() => {
                 powerText.innerHTML = " "
             }, 3000)
             setTimeout(() => {
-                playerSpeed = 7;
+                playerSpeed /= 2
             }, 10000)
+
             break;
 
         case 4: 
