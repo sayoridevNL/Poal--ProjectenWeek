@@ -15,9 +15,20 @@ const startBtn = document.getElementById("startBtn")
 const backToMenuBtn = document.getElementById("backToMenuBtn")
 const bgMusic = document.getElementById("bgMusic")
 const GoalTune = document.getElementById("GoalTune")
+const countrySelectPopup = document.getElementById('countrySelectPopup');
+const countryStartBtn = document.getElementById('countryStartBtn');
+const randomizeBtn = document.getElementById('randomize');
+const p1Container = document.getElementById('p1-buttons');
+const p2Container = document.getElementById('p2-buttons');
+const summary = document.getElementById('summary');
+const player1Img = player1.querySelector('img');
+const player2Img = player2.querySelector('img');
+const powerText = document.getElementById("powerText")
 
 const fieldWidth = 1450;
 const fieldHeight = 700;
+
+const teams = ['Nederland', 'Spanje', 'Portugal', 'Australië', 'Egypte', 'Canada', 'Brazilië', 'Argentinië', 'Antarctica'];
 
 // The X and Y are for the location of the ball 
 let x = 750;
@@ -114,21 +125,87 @@ const keys = {
 
     startBtn.addEventListener("click", () => {
     startMenu.style.display = "none";
-    gamePaused = false;
-    gameActive = true;
-
-    npc1_1Direction = 1;
-    npc1_2Direction = 1;
-    npc2_1Direction = 1;
-    npc2_2Direction = 1;
+    countrySelectPopup.style.display = "flex";
 
     bgMusic.volume = 0.5;
     bgMusic.loop = true;
     bgMusic.play();
 
+    
+});
+
+function makeCountryBtn(name, container) {
+  const btn = document.createElement('button');
+  btn.textContent = name;
+  btn.addEventListener('click', () => {
+    container.querySelectorAll('button').forEach(b => b.classList.remove('selected'));
+    btn.classList.add('selected');
+    updateSummaryText();
+  });
+  return btn;
+}
+
+// Fill buttons
+function fillCountryButtons() {
+  teams.forEach(team => p1Container.appendChild(makeCountryBtn(team, p1Container)));
+  teams.forEach(team => p2Container.appendChild(makeCountryBtn(team, p2Container)));
+}
+
+function updateSummaryText() {
+  const p1 = p1Container.querySelector('.selected');
+  const p2 = p2Container.querySelector('.selected');
+  summary.textContent = `${p1 ? p1.textContent : '—'} vs ${p2 ? p2.textContent : '—'}`;
+}
+
+// Randomize
+randomizeBtn.addEventListener('click', () => {
+  [p1Container, p2Container].forEach(container => {
+    container.querySelectorAll('button').forEach(b => b.classList.remove('selected'));
+    const random = Array.from(container.querySelectorAll('button'))[Math.floor(Math.random() * teams.length)];
+    random.classList.add('selected');
+  });
+  updateSummaryText();
+});
+
+// Start game after selection
+countryStartBtn.addEventListener('click', () => {
+  const p1 = p1Container.querySelector('.selected');
+  const p2 = p2Container.querySelector('.selected');
+
+  if (!p1 || !p2) {
+    alert('Kies eerst een land voor beide spelers of klik Willekeurig.');
+    return;
+  }
+
+  // Update player flags
+  player1Img.src = `images/${p1.textContent}.webp`;
+  player2Img.src = `images/${p2.textContent}.webp`;
+
+  // Hide country selection
+  countrySelectPopup.style.display = 'none';
+
+  npc1_1Direction = 1;
+    npc1_2Direction = 1;
+    npc2_1Direction = 1;
+    npc2_2Direction = 1;
+
+  // Start game
+  gamePaused = false;
+  gameActive = true;
+  if (!gameLoopRunning) 
     gameLoopRunning = true;
     requestAnimationFrame(gameLoop);
 });
+
+// Show country selection when start menu is clicked
+startBtn.addEventListener('click', () => {
+  startMenu.style.display = 'none';
+  countrySelectPopup.style.display = 'flex';
+});
+
+// Initialize buttons
+fillCountryButtons();
+updateSummaryText();
 
 
 //  this function makes the ball move
@@ -342,9 +419,14 @@ function applyPowerup(player, type) {
     switch (type) {
         case 1:
             playerSpeed *= 2;
+            powerText.innerHTML = "The Player Speed is x2 for 10 seconds"
+            setTimeout(() => {
+                powerText.innerHTML = " "
+            }, 3000)
             setTimeout(() => {
                 playerSpeed /= 2
             }, 10000)
+
             break;
         
         case 2:
@@ -352,6 +434,10 @@ function applyPowerup(player, type) {
             npc1_2Speed *= 2;
             npc2_1Speed *= 2;
             npc2_2Speed *= 2;
+            powerText.innerHTML = "The NPC Speed is x2 for 10 seconds"
+            setTimeout(() => {
+                powerText.innerHTML = " "
+            }, 3000)
             setTimeout(() => {
                 npc1_1Speed /= 2;
                 npc1_2Speed /= 2;
@@ -361,8 +447,16 @@ function applyPowerup(player, type) {
             break;
 
         case 3:
-            playerSpeed *= 2;
-            setTimeout(() => playerSpeed /= 2, 10000)
+            x *= 2;
+            y *= 2;
+            powerText.innerHTML = "The Ball Speed is x2 for 10 seconds"
+            setTimeout(() => {
+                powerText.innerHTML = " "
+            }, 3000)
+            setTimeout(() => {
+                x /= 2;
+                y /= 2;
+            }, 10000)
             break;
 
         case 4: 
@@ -370,6 +464,10 @@ function applyPowerup(player, type) {
             npc1_2Speed = 0;
             npc2_1Speed = 0;
             npc2_2Speed = 0;
+            powerText.innerHTML = "The NPC are frozen for 10 seconds"
+            setTimeout(() => {
+                powerText.innerHTML = " "
+            }, 3000)
             setTimeout(() => {
                 npc1_1Speed = 5;
                 npc1_2Speed = 5;
@@ -401,6 +499,12 @@ function applyPowerup(player, type) {
             player2.style.left = player2x + 'px';
             player2.style.top = player2y + 'px';
         };
+
+        powerText.innerHTML = "The Controlls are reversed for 10 seconds"
+
+        setTimeout(() => {
+                powerText.innerHTML = " "
+            }, 3000)
 
         setTimeout(() => {
             movePlayer1 = originalMovePlayer1;

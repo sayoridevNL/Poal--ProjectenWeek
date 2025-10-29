@@ -38,13 +38,37 @@
             </div>
         </div> 
     </div>
+    <div id="countrySelectPopup" class="popup">
+        <div id="countrySelectContent">
+            <img src="images/logo_poal.png"></img>
+            <p>Kies een land voor elke speler of klik 'Willekeurig'</p>
+
+            <div class="selection-container">
+            <div class="player-select">
+                <h2>Speler 1</h2>
+                <div id="p1-buttons"></div>
+            </div>
+
+            <div class="player-select">
+                <h2>Speler 2</h2>
+                <div id="p2-buttons"></div>
+            </div>
+            </div>
+
+            <button id="randomize">Willekeurig</button>
+            <button id="countryStartBtn">Start</button>
+            <p id="summary">— vs —</p>
+        </div>
+    </div>
+    <h1 id="score"></h1>
+    <h3 id="powerText"></h3>
     <div id="veld">
         <div id="goal1"></div>
         <div id="goal2"></div>
        <div id="player1"><img src="images/nederland.webp" alt="Blue Team Flag"></div>
         <div id="npc1_1"></div>
         <div id="npc1_2"></div>
-        <div id="player2"><img src="images/antartica.png" alt="Red Team Flag"></div>
+        <div id="player2"><img src="images/Antarctica.webp" alt="Red Team Flag"></div>
         <div id="npc2_1"></div>
         <div id="npc2_2"></div>
         <div id="ball"></div>
@@ -52,10 +76,7 @@
         <div id="middleLine"></div>
         <div id="middlecircle"></div>
     </div>
-    <h1 id="score"></h1>
     <h1 id="timer"></h1>
-    <h2>Team Blue use W S A D</h2>
-    <h2>Team Red use arrow keys</h2>
     <div id="gameOverPopup" class="popup">
         <div id="popup-content">
             <img src="images/logo_poal.png" alt="Game Logo">

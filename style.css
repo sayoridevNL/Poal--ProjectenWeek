@@ -124,6 +124,75 @@ body {
   color: #fff;
 }
 
+#countrySelectContent {
+  padding: 40px;
+  border-radius: 20px;
+  text-align: center;
+}
+
+.selection-container {
+  display: flex;
+  justify-content: center;
+  gap: 2em;
+  margin-bottom: 1em;
+}
+
+.player-select {
+  display: flex;
+  flex-direction: column;
+  gap: 0.5em;
+}
+
+#countrySelectContent h2{
+  color: white;
+    text-align: center;
+    margin-top: 5px;
+    font-size: 50px;
+    font-family: Cambria, Cochin, Georgia, Times, 'Times New Roman', serif;
+}
+
+#countrySelectContent p{
+  color: white;
+    text-align: center;
+    margin-top: 5px;
+    font-size: 25px;
+    font-family: Cambria, Cochin, Georgia, Times, 'Times New Roman', serif;
+}
+
+#p1-buttons button, #p2-buttons button {
+  display: block;
+    margin: 5px auto;
+    width: 175px;
+    background-color: rgb(255, 255, 255);
+    color: rgb(0, 0, 0);
+    padding: 10px 10px;
+    text-align: center;
+    text-decoration: none;
+    font-size: 20px;
+    cursor: pointer;
+    font-family: Impact, Haettenschweiler, 'Arial Narrow Bold', sans-serif;
+}
+
+#p1-buttons button.selected, #p2-buttons button.selected  {
+  background-color: rgb(144, 127, 255);
+  border: solid 4px rgb(46, 14, 255);
+  color: rgb(0, 0, 0);
+}
+
+#randomize, #countryStartBtn {
+  display: block;
+    margin: 5px auto;
+    width: 175px;
+    background-color: rgb(255, 255, 255);
+    color: rgb(0, 0, 0);
+    padding: 10px 50px;
+    text-align: center;
+    text-decoration: none;
+    font-size: 20px;
+    cursor: pointer;
+    font-family: Impact, Haettenschweiler, 'Arial Narrow Bold', sans-serif;
+}
+
 /* veld */
 #veld {
   width: 1450px;
@@ -372,6 +441,6 @@ h2 {
 }
 
  img {
-  width: 450px;
-  height: 250px;
+  width: 225px;
+  height: 125px;
 }
