@@ -14,6 +14,7 @@ const startMenu = document.getElementById("startMenu")
 const startBtn = document.getElementById("startBtn")
 const backToMenuBtn = document.getElementById("backToMenuBtn")
 const bgMusic = document.getElementById("bgMusic")
+const GoalTune = document.getElementById("GoalTune")
 
 const fieldWidth = 1450;
 const fieldHeight = 700;
@@ -85,7 +86,7 @@ let npc2_2y = 500;
 // this sets the time at 0
 let lastTime = 0;
 let time = 0;
-let gameDuration = 120
+let gameDuration = 12
 let gameActive = false;
 let gamePaused = true;
 let gameLoopRunning = false;
@@ -109,25 +110,26 @@ const keys = {
     arrowright: false
 };
 
-const originalRequestAnimationFrame = window.requestAnimationFrame;
-    window.requestAnimationFrame = function(callback) {
-      if (!gamePaused) {
-        return originalRequestAnimationFrame(callback);
-      }
-    };
+
 
     startBtn.addEventListener("click", () => {
-        startMenu.style.display = "none";
-        gamePaused = false;
-        gameActive = true;
+    startMenu.style.display = "none";
+    gamePaused = false;
+    gameActive = true;
 
-        bgMusic.volume = 0.5
-        bgMusic.play()
-        if (!gameLoopRunning) {
-            gameLoopRunning = true;
-            requestAnimationFrame(gameLoop);
-        }
-    })
+    npc1_1Direction = 1;
+    npc1_2Direction = 1;
+    npc2_1Direction = 1;
+    npc2_2Direction = 1;
+
+    bgMusic.volume = 0.5;
+    bgMusic.loop = true;
+    bgMusic.play();
+
+    gameLoopRunning = true;
+    requestAnimationFrame(gameLoop);
+});
+
 
 //  this function makes the ball move
 function movementBall(deltaTime) {
@@ -433,46 +435,62 @@ function endGame() {
     popup.style.display = "flex"
 }
 
-document.getElementById("replayBtn").addEventListener("click", () => {
-    homeScore = 0;
-    awayScore = 0;
-    time = 0;
-    gameActive = true;
 
-    npc1_1Direction = 1;
-    npc1_2Direction = 1;
-    npc2_1Direction = 1;
-    npc2_2Direction = 1;
+replayBtn.addEventListener("click", () => {
+  // Hide the game over popup
+  gameOverPopup.style.display = "none";
 
-    player1x = 15;
-    player1y = 350;
-    player2x = 1375;
-    player2y = 350;
+  // Reset scores and timer
+  homeScore = 0;
+  awayScore = 0;
+  time = 0;
+  updateScore();
 
-    player1.style.left = player1x + 'px';
-    player1.style.top = player1y + 'px';
-    player2.style.left = player2x + 'px';
-    player2.style.top = player2y + 'px';
+  // Reset ball and player positions
+  resetBall();
+  player1x = 15;
+  player1y = 350;
+  player2x = 1375;
+  player2y = 350;
+  player1.style.left = player1x + "px";
+  player1.style.top = player1y + "px";
+  player2.style.left = player2x + "px";
+  player2.style.top = player2y + "px";
 
-    updateScore();
-    resetBall();
+  // Reset NPC movement directions
+  npc1_1Direction = 1;
+  npc1_2Direction = 1;
+  npc2_1Direction = 1;
+  npc2_2Direction = 1;
 
-    document.getElementById("gameOverPopup").style.display = "none";
-})
+  // Resume game
+  gameActive = true;
+  gamePaused = false;
+
+  // Restart background music
+  bgMusic.currentTime = 0;
+  bgMusic.play();
+
+  // Restart game loop
+  requestAnimationFrame(gameLoop);
+});
 
 backToMenuBtn.addEventListener("click", () => {
-      document.getElementById("gameOverPopup").style.display = "none";
-      startMenu.style.display = "flex";
-      gamePaused = true;
-      gameActive = false;
-      vx = 0;
-      vy = 0;
-      homeScore = 0;
-      awayScore = 0;
-      time = 0;
-      updateScore();
-      resetBall();
-    });
+  gameOverPopup.style.display = "none";
+  startMenu.style.display = "flex";
+  gamePaused = true;
+  gameActive = false;
+
+  vx = 0;
+  vy = 0;
+  homeScore = 0;
+  awayScore = 0;
+  time = 0;
+  updateScore();
+  resetBall();
+
+  gameLoopRunning = false;
+});
 
 
 // here we check if collision between ball and player happens
@@ -694,12 +712,12 @@ if (powerupRect) {
         awayScore++;
         updateScore();
         resetBall();
-    }
-
-    if (collidesWithGoal2) {
+        GoalTune.play()
+    } else if (collidesWithGoal2) {
         homeScore++;
         updateScore();
         resetBall();
+        GoalTune.play()
     }
 
     if (hitP1 || hitP2) {
@@ -713,6 +731,8 @@ if (powerupRect) {
 
 // here we combine all functions into 1 so it goes into the loop later 
 function gameLoop(timestamp) {
+    if (!gameActive) return;
+    
     if (!lastTime) lastTime = timestamp;
     const deltaTime = (timestamp - lastTime) / 10;
     lastTime = timestamp
