@@ -86,7 +86,7 @@ let npc2_2y = 500;
 // this sets the time at 0
 let lastTime = 0;
 let time = 0;
-let gameDuration = 12
+let gameDuration = 120
 let gameActive = false;
 let gamePaused = true;
 let gameLoopRunning = false;
