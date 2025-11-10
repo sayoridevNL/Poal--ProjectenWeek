@@ -23,6 +23,7 @@ const summary = document.getElementById('summary');
 const player1Img = player1.querySelector('img');
 const player2Img = player2.querySelector('img');
 const powerText = document.getElementById("powerText")
+const Bong = document.getElementById("Bong")
 
 const fieldWidth = 1450;
 const fieldHeight = 700;
@@ -215,19 +216,23 @@ function movementBall(deltaTime) {
     // bounce for top and bottom walls
     if (y <= 0) {
         y = 0; // clamp inside
-        vy = Math.abs(vy); // go downward
+        vy = Math.abs(vy); 
+        Bong.play()
     } else if (y + ballSize >= fieldHeight) {
         y = fieldHeight - ballSize;
-        vy = -Math.abs(vy); // go upward
+        vy = -Math.abs(vy);
+        Bong.play()
     }
 
     // bounce for left and right walls
     if (x <= 0) {
         x = 0;
-        vx = Math.abs(vx); // go right
+        vx = Math.abs(vx); 
+        Bong.play()
     } else if (x + ballSize >= fieldWidth) {
         x = fieldWidth - ballSize;
-        vx = -Math.abs(vx); // go left
+        vx = -Math.abs(vx); 
+        Bong.play()
     }
 
     // add small random variation to avoid stuck trajectories
@@ -773,6 +778,7 @@ if (powerupRect) {
         // move ball slightly to prevent it from tweaking out
         x += vx * 2;
         y += vy * 2;
+        Bong.play()
     }
 
     if (collidesWithNpc1_1 || collidesWithNpc1_2 || collidesWithNpc2_1 || collidesWithNpc2_2) {
@@ -807,6 +813,7 @@ if (powerupRect) {
     // Nudge the ball slightly to avoid overlap
     x += vx * 2;
     y += vy * 2;
+    Bong.play()
 }
 
     // check the goal scoring
@@ -814,10 +821,12 @@ if (powerupRect) {
         awayScore++;
         updateScore();
         resetBall();
+        Bong.play()
     } else if (collidesWithGoal2) {
         homeScore++;
         updateScore();
         resetBall();
+        Bong.play()
     }
 
     if (hitP1 || hitP2) {
