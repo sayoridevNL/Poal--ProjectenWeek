@@ -28,7 +28,7 @@ const Bong = document.getElementById("Bong")
 const fieldWidth = 1450;
 const fieldHeight = 700;
 
-const teams = ['Nederland', 'Spanje', 'Portugal', 'Australië', 'Egypte', 'Canada', 'Brazilië', 'Argentinië', 'Antarctica'];
+let teams = ['ad', 'ae', 'af', 'ag', 'ai', 'al', 'am', 'ao', 'aq', 'ar', 'as', 'at', 'au', 'Australië', 'aw', 'ax', 'az', 'ba', 'bb', 'bd', 'be', 'bf', 'bg', 'bh', 'bi', 'bj', 'bl', 'bm', 'bn', 'bo', 'bq', 'br', 'Brazilië', 'bs', 'bt', 'bv', 'bw', 'by', 'bz', 'ca', 'Canada', 'cc', 'cd', 'cf', 'cg', 'ch', 'ci', 'ck', 'cl', 'cm', 'cn', 'co', 'cr', 'cu', 'cv', 'cw', 'cx', 'cy', 'cz', 'de', 'dj', 'dk', 'dm', 'do', 'dz', 'ec', 'ee', 'eg', 'eh', 'er', 'es', 'et', 'fi', 'fj', 'fk', 'fm', 'fo', 'fr', 'ga', 'gb-eng', 'gb-nir', 'gb-sct', 'gb-wls', 'gb', 'gd', 'ge', 'gf', 'gg', 'gh', 'gi', 'gl', 'gm', 'gn', 'gp', 'gq', 'gr', 'gs', 'gt', 'gu', 'gw', 'gy', 'hk', 'hm', 'hn', 'hr', 'ht', 'hu', 'id', 'ie', 'il', 'im', 'in', 'io', 'iq', 'ir', 'is', 'it', 'je', 'jm', 'jo', 'jp', 'ke', 'kg', 'kh', 'ki', 'km', 'kn', 'kp', 'kr', 'kw', 'ky', 'kz', 'la', 'lb', 'lc', 'li', 'lk', 'lr', 'ls', 'lt', 'lu', 'lv', 'ly', 'ma', 'mc', 'md', 'me', 'mf', 'mg', 'mh', 'mk', 'ml', 'mm', 'mn', 'mo', 'mp', 'mq', 'mr', 'ms', 'mt', 'mu', 'mv', 'mw', 'mx', 'my', 'mz', 'na', 'nc', 'ne', 'nf', 'ng', 'ni', 'nl', 'no', 'np', 'nr', 'nu', 'nz', 'om', 'pa', 'pe', 'pf', 'pg', 'ph', 'pk', 'pl', 'pm', 'pn', 'Portugal', 'pr', 'ps', 'pt', 'pw', 'py', 'qa', 're', 'ro', 'rs', 'ru', 'rw', 'sa', 'sb', 'sc', 'sd', 'se', 'sg', 'sh', 'si', 'sj', 'sk', 'sl', 'sm', 'sn', 'so', 'Spanje', 'sr', 'ss', 'st', 'sv', 'sx', 'sy', 'sz', 'tc', 'td', 'tf', 'tg', 'th', 'tj', 'tk', 'tl', 'tm', 'tn', 'to', 'tr', 'tt', 'tv', 'tw', 'tz', 'ua', 'ug', 'um', 'us', 'uy', 'uz', 'va', 'vc', 've', 'vg', 'vi', 'vn', 'vu', 'wf', 'ws', 'xk', 'ye', 'yt', 'za', 'zm', 'zw'];
 
 // The X and Y are for the location of the ball 
 let x = 750;
@@ -134,78 +134,140 @@ const keys = {
     
 });
 
-function makeCountryBtn(name, container) {
-  const btn = document.createElement('button');
-  btn.textContent = name;
-  btn.addEventListener('click', () => {
-    container.querySelectorAll('button').forEach(b => b.classList.remove('selected'));
-    btn.classList.add('selected');
-    updateSummaryText();
-  });
-  return btn;
+// Wheel-based country selectors for Player 1 and Player 2
+const wheelP1 = document.getElementById('wheelP1');
+const wheelP2 = document.getElementById('wheelP2');
+let indexP1 = 0;
+let indexP2 = 0;
+const wheelP1Up = document.getElementById('wheelP1Up');
+const wheelP1Down = document.getElementById('wheelP1Down');
+const wheelP2Up = document.getElementById('wheelP2Up');
+const wheelP2Down = document.getElementById('wheelP2Down');
+
+function buildWheels() {
+    // clear any existing
+    if (wheelP1) wheelP1.innerHTML = '';
+    if (wheelP2) wheelP2.innerHTML = '';
+
+    [wheelP1, wheelP2].forEach(wheel => {
+        if (!wheel) return;
+        teams.forEach(team => {
+            const div = document.createElement('div');
+            div.className = 'wheel-item';
+            div.innerHTML = `\n        <img src="images/${team}.webp" alt="${team}">\n        <p>${team}</p>\n      `;
+            wheel.appendChild(div);
+        });
+    });
 }
 
-// Fill buttons
-function fillCountryButtons() {
-  teams.forEach(team => p1Container.appendChild(makeCountryBtn(team, p1Container)));
-  teams.forEach(team => p2Container.appendChild(makeCountryBtn(team, p2Container)));
+function updateWheel(wheelEl, index) {
+    if (!wheelEl) return;
+    const offset = -index * 180; // matches CSS item height
+    wheelEl.style.transform = `translateY(${offset}px)`;
+    wheelEl.querySelectorAll('.wheel-item').forEach((item, i) => {
+        item.classList.toggle('selected', i === index);
+    });
 }
 
-function updateSummaryText() {
-  const p1 = p1Container.querySelector('.selected');
-  const p2 = p2Container.querySelector('.selected');
-  summary.textContent = `${p1 ? p1.textContent : '—'} vs ${p2 ? p2.textContent : '—'}`;
+function updateSummaryFromWheels() {
+    summary.textContent = `${teams[indexP1]} vs ${teams[indexP2]}`;
 }
 
-// Randomize
+function moveWheel(player, dir) {
+    if (player === 1) {
+        indexP1 = (indexP1 + dir + teams.length) % teams.length;
+        updateWheel(wheelP1, indexP1);
+    } else {
+        indexP2 = (indexP2 + dir + teams.length) % teams.length;
+        updateWheel(wheelP2, indexP2);
+    }
+    updateSummaryFromWheels();
+}
+
+function attachWheelInteraction() {
+    if (wheelP1) {
+        wheelP1.querySelectorAll('.wheel-item').forEach((item, i) => {
+            item.addEventListener('click', () => {
+                indexP1 = i;
+                updateWheel(wheelP1, indexP1);
+                updateSummaryFromWheels();
+            });
+        });
+    }
+
+    if (wheelP2) {
+        wheelP2.querySelectorAll('.wheel-item').forEach((item, i) => {
+            item.addEventListener('click', () => {
+                indexP2 = i;
+                updateWheel(wheelP2, indexP2);
+                updateSummaryFromWheels();
+            });
+        });
+    }
+
+    // mouse wheel support per container
+    document.querySelectorAll('.wheel-container').forEach(container => {
+        container.addEventListener('wheel', e => {
+            e.preventDefault();
+            const wheelEl = container.querySelector('.wheel');
+            const dir = e.deltaY > 0 ? 1 : -1;
+            if (!wheelEl) return;
+            if (wheelEl.id === 'wheelP1') moveWheel(1, dir);
+            else if (wheelEl.id === 'wheelP2') moveWheel(2, dir);
+        });
+    });
+}
+
+// Randomize both wheels
 randomizeBtn.addEventListener('click', () => {
-  [p1Container, p2Container].forEach(container => {
-    container.querySelectorAll('button').forEach(b => b.classList.remove('selected'));
-    const random = Array.from(container.querySelectorAll('button'))[Math.floor(Math.random() * teams.length)];
-    random.classList.add('selected');
-  });
-  updateSummaryText();
+    indexP1 = Math.floor(Math.random() * teams.length);
+    indexP2 = Math.floor(Math.random() * teams.length);
+    updateWheel(wheelP1, indexP1);
+    updateWheel(wheelP2, indexP2);
+    updateSummaryFromWheels();
 });
 
-// Start game after selection
+// Up/Down button handlers
+if (wheelP1Up) wheelP1Up.addEventListener('click', () => moveWheel(1, -1));
+if (wheelP1Down) wheelP1Down.addEventListener('click', () => moveWheel(1, 1));
+if (wheelP2Up) wheelP2Up.addEventListener('click', () => moveWheel(2, -1));
+if (wheelP2Down) wheelP2Down.addEventListener('click', () => moveWheel(2, 1));
+
+// Start game after wheel selection
 countryStartBtn.addEventListener('click', () => {
-  const p1 = p1Container.querySelector('.selected');
-  const p2 = p2Container.querySelector('.selected');
+    // both indices always valid, but keep a simple check
+    if (indexP1 == null || indexP2 == null) {
+        alert('Kies eerst een land voor beide spelers of klik Willekeurig.');
+        return;
+    }
 
-  if (!p1 || !p2) {
-    alert('Kies eerst een land voor beide spelers of klik Willekeurig.');
-    return;
-  }
+    // Update player flags
+    player1Img.src = `images/${teams[indexP1]}.webp`;
+    player2Img.src = `images/${teams[indexP2]}.webp`;
 
-  // Update player flags
-  player1Img.src = `images/${p1.textContent}.webp`;
-  player2Img.src = `images/${p2.textContent}.webp`;
+    // Hide the country selection popup (we now use a popup)
+    if (countrySelectPopup) countrySelectPopup.style.display = 'none';
 
-  // Hide country selection
-  countrySelectPopup.style.display = 'none';
-
-  npc1_1Direction = 1;
+    npc1_1Direction = 1;
     npc1_2Direction = 1;
     npc2_1Direction = 1;
     npc2_2Direction = 1;
 
-  // Start game
-  gamePaused = false;
-  gameActive = true;
-  if (!gameLoopRunning) 
-    gameLoopRunning = true;
+    // Start game
+    gamePaused = false;
+    gameActive = true;
+    if (!gameLoopRunning) gameLoopRunning = true;
     requestAnimationFrame(gameLoop);
 });
 
-// Show country selection when start menu is clicked
-startBtn.addEventListener('click', () => {
-  startMenu.style.display = 'none';
-  countrySelectPopup.style.display = 'flex';
-});
-
-// Initialize buttons
-fillCountryButtons();
-updateSummaryText();
+// Build wheels and initialize
+buildWheels();
+updateWheel(wheelP1, indexP1);
+updateWheel(wheelP2, indexP2);
+attachWheelInteraction();
+updateSummaryFromWheels();
+// ensure popup hidden on load
+if (countrySelectPopup) countrySelectPopup.style.display = 'none';
 
 
 //  this function makes the ball move

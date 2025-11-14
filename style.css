@@ -444,3 +444,127 @@ h2 {
   width: 225px;
   height: 125px;
 }
+
+/* ----------------------------
+   Popup overlay (country select)
+   ---------------------------- */
+
+.popup {
+  display: none; /* hidden by default */
+  position: fixed;
+  inset: 0; /* top:0; right:0; bottom:0; left:0; */
+  background: rgba(0,0,0,0.6); /* dim the background */
+  backdrop-filter: blur(3px);
+  z-index: 9999; /* sit on top of the game */
+  align-items: center;
+  justify-content: center;
+  padding: 20px;
+}
+
+/* the content card inside popup */
+#countrySelectContent {
+  width: min(1000px, 95%);
+  max-width: 1100px;
+  background: linear-gradient(180deg,#1a1a1a,#111);
+  border-radius: 12px;
+  padding: 22px;
+  box-shadow: 0 10px 40px rgba(0,0,0,0.6);
+  color: #fff;
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+  align-items: center;
+}
+
+/* selection container layout */
+.selection-container {
+  display: flex;
+  gap: 18px;
+  width: 100%;
+  justify-content: space-around;
+  flex-wrap: wrap;
+}
+
+/* wheel styles (single visible item) */
+.wheel-container {
+  position: relative;
+  width: 260px;
+  height: 180px;
+  overflow: hidden;
+  border-radius: 12px;
+  border: 2px solid #444;
+  background: #0f0f0f;
+  box-shadow: inset 0 3px 10px rgba(0,0,0,0.7);
+}
+
+.wheel-controls {
+  display: flex;
+  gap: 8px;
+  justify-content: center;
+  margin-top: 8px;
+}
+
+.wheel-btn {
+  background: linear-gradient(180deg,#fff,#ddd);
+  border: 1px solid #888;
+  padding: 6px 10px;
+  border-radius: 6px;
+  cursor: pointer;
+  font-size: 14px;
+}
+
+.wheel-btn:active { transform: translateY(1px); }
+
+.wheel {
+  position: absolute;
+  left: 0;
+  top: 0;
+  width: 100%;
+  transition: transform 300ms cubic-bezier(.22,.9,.22,1);
+  will-change: transform;
+}
+
+.wheel-item {
+  height: 180px; /* item height used by JS */
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  gap: 6px;
+  opacity: 0.35;
+  user-select: none;
+}
+
+.wheel-item img {
+  width: 160px;
+  height: 96px;
+  object-fit: cover;
+  border-radius: 8px;
+  box-shadow: 0 6px 18px rgba(0,0,0,0.7);
+}
+
+.wheel-item p {
+  margin: 0;
+  font-size: 14px;
+  text-align: center;
+}
+
+/* highlight center item */
+.wheel-item.selected {
+  opacity: 1;
+  transform: scale(1.08);
+}
+
+/* controls area under wheels */
+.controls {
+  display: flex;
+  gap: 12px;
+  margin-top: 8px;
+}
+
+/* Small responsive tweaks */
+@media (max-width: 700px) {
+  .selection-container { flex-direction: column; align-items: center; }
+  .wheel-container { width: 85%; }
+}
+

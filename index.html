@@ -25,28 +25,51 @@
             </div>
         </div> 
     </div>
+    <!-- Country select popup shown after Start -->
     <div id="countrySelectPopup" class="popup">
-        <div id="countrySelectContent">
-            <img src="images/logo_poal.png"></img>
-            <p>Kies een land voor elke speler of klik 'Willekeurig'</p>
+      <div id="countrySelectContent">
+        <h2>Kies een land voor beide spelers</h2>
 
-            <div class="selection-container">
-            <div class="player-select">
-                <h2>Speler 1</h2>
-                <div id="p1-buttons"></div>
-            </div>
+        <div class="selection-container">
 
-            <div class="player-select">
-                <h2>Speler 2</h2>
-                <div id="p2-buttons"></div>
-            </div>
-            </div>
+          <!-- PLAYER 1 -->
+          <div class="player-select">
+              <h3>Speler 1</h3>
 
+              <div class="wheel-container">
+                  <div class="wheel" id="wheelP1"></div>
+              </div>
+              <div class="wheel-controls">
+                <button id="wheelP1Up" class="wheel-btn">▲</button>
+                <button id="wheelP1Down" class="wheel-btn">▼</button>
+              </div>
+          </div>
+
+          <!-- PLAYER 2 -->
+          <div class="player-select">
+              <h3>Speler 2</h3>
+
+              <div class="wheel-container">
+                  <div class="wheel" id="wheelP2"></div>
+              </div>
+              <div class="wheel-controls">
+                <button id="wheelP2Up" class="wheel-btn">▲</button>
+                <button id="wheelP2Down" class="wheel-btn">▼</button>
+              </div>
+          </div>
+
+        </div>
+
+        <div class="controls">
             <button id="randomize">Willekeurig</button>
             <button id="countryStartBtn">Start</button>
-            <p id="summary">— vs —</p>
         </div>
+
+        <p id="summary">— vs —</p>
+
+      </div>
     </div>
+
     <h1 id="score"></h1>
     <div id="veld">
         <div id="goal1"></div>
